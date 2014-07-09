@@ -17,6 +17,7 @@ class PongGame < BasicGame
     @bg.draw(0, 0)
     @ball.draw(@ball_x, @ball_y)
     @paddle.draw(@paddle_x, 400)
+    @brik.draw(@brik_x,100)
     graphics.draw_string('RubyPong (ESC to exit)', 8, container.height - 30)
   end
 
@@ -24,10 +25,13 @@ class PongGame < BasicGame
     @bg = Image.new('bg.png')
     @ball = Image.new('Vivek.png')
     @paddle = Image.new('Harvard_Logo.png')
+    @brik = Image.new('brik.png')
     @paddle_x = 200
+    @brik_x = 101
     @ball_x = 200
     @ball_y = 200
     @ball_angle = 45
+    @multi=1
   end
 
   def update(container, delta)
@@ -44,6 +48,7 @@ class PongGame < BasicGame
     end
     @ball_x += 0.3 * delta * Math.cos(@ball_angle * Math::PI / 180)
     @ball_y -= 0.3 * delta * Math.sin(@ball_angle * Math::PI / 180)
+    @brik_x += @multi*1
     if (@ball_x > container.width - @ball.width) || (@ball_y < 0) || (@ball_x < 0)
       @ball_angle = (@ball_angle + 90) % 360
     end
@@ -53,6 +58,11 @@ class PongGame < BasicGame
       @ball_y = 200
       @ball_angle = 45
     end
+    if @brik_x==container.width-@brik.width || @brik_x==0
+      @multi*=(-1)
+    end
+
+      
     if @ball_x >= @paddle_x and @ball_x <= (@paddle_x + @paddle.width) and @ball_y.round >= (400 - @ball.height)
       @ball_angle = (@ball_angle + 90) % 360
     end
